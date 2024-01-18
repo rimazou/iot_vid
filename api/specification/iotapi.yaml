@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: ESP32 Sensor and LED API
+  version: 1.0.0
+paths:
+  /sensors:
+    get:
+      summary: Get list of connected sensors
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "temperature": {"pin": 12},
+                  "light": {"pin": 14},
+                  "led": {"pin": 5},
+                  "led_threshold": {"nightModeThreshold": 1500},
+                  "magenta_led": {"pin": 18},
+                  "yellow_led": {"pin": 19},
+                  "cyan_led": {"pin": 21}
+                }
+  /temperature:
+    get:
+      summary: Get information about the temperature sensor
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "type": "temperature",
+                  "value": 25.5,
+                  "unit": "°C"
+                }
+  /light:
+    get:
+      summary: Get information about the light sensor
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "type": "light",
+                  "value": 500,
+                  "unit": "lux"
+                }
+  /led:
+    post:
+      summary: Control the state of the RGB LED
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: |
+              {
+                "magenta": 255,
+                "cyan": 128,
+                "yellow": 0
+              }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "message": "RGB LED changed colors"
+                }
+  /nightModeThreshold:
+    post:
+      summary: Set the threshold for turning on/off the night mode screen
+      parameters:
+        - name: threshold
+          in: query
+          required: true
+          schema:
+            type: number
+            minimum: 500
+            maximum: 4000
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "message": "Threshold set successfully"
+                }
